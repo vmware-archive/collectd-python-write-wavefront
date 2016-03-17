@@ -129,7 +129,6 @@ def send_wavefront(host, port, item_queue):
                 regex=  '(\S+.*)(\s+(\d+\.\d+|\d+)\s+1\d{9}.*)'
                 m = re.search(regex, message)
                 if m:
-                    print "match"
                     string= m.groups()[0]
                     string = re.sub(r'[ |"|$|#|\']', '_', string)
                     remainder= m.groups()[1]
