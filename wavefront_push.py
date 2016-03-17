@@ -123,6 +123,18 @@ def send_wavefront(host, port, item_queue):
                 continue
         
         try:
+            #strip white spaces and quotes for bad plugins
+            epoch=message.split(' ')[2]
+            if not re.search("^1[2-9]\d{8}$", epoch):
+                regex=  '(\S+.*)(\s+(\d+\.\d+|\d+)\s+1\d{9}.*)'
+                m = re.search(regex, message)
+                if m:
+                    print "match"
+                    string= m.groups()[0]
+                    string = re.sub(r'[ |"|$|#|\']', '_', string)
+                    remainder= m.groups()[1]
+                    message= string+ remainder+"\n"
+            
             # Lazy "send everything", loosing messages is very much a possibility
             # we should know that we failed to send "something".
             connection.sendall(message)
